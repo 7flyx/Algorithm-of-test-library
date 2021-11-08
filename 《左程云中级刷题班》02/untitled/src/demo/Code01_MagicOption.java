@@ -1,5 +1,6 @@
 package demo;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -76,6 +77,7 @@ public class Code01_MagicOption {
         int lenMore = arrMore.length;
         int lenLess = arrLess.length;
         int opt = 0; //最后答案
+        Arrays.sort(arrMore); //对整个数组进行升序的排序
         //遍历数组
         for (int i = 0; i < arrMore.length; i++) {
             double cur = (double) arrMore[i];
