@@ -38,6 +38,8 @@ public class Code03_SplitArrayCalcMax {
             }
         }
 
-        return 0;
+        //全局最大值分别减去第一个数和最后一个数即可
+        return Math.max(Math.abs(max - arr[0]),
+                Math.abs(max - arr[arr.length - 1]));
     }
 }
