@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Created by Terry
  * User: Administrator
@@ -9,8 +11,22 @@
  */
 public class Code01_CalcTwoNumDiv {
     public static void main(String[] args) {
-        int[] arr = {1,3,5,2,7,8,9};
-        System.out.println(calcTwoNumDiv(arr));
+
+        int testTime = 5000;
+        int N = 50; //数组长度
+        int range = 1000; //数据范围
+        boolean flag = true;
+        for (int i = 0; i < testTime; i++) {
+            int[] arr = generateArr(N, range);
+
+            int p1 = calcTwoNumDiv(arr);
+            int p2 = sortAfter(arr);
+            if (p1 != p2) {
+                flag = false;
+                break;
+            }
+        }
+        System.out.println(flag? "正确" : "错误");
     }
 
     /**
@@ -25,6 +41,7 @@ public class Code01_CalcTwoNumDiv {
      * 然后前一个桶的最大值跟后一个桶的最小值，是相邻的数据，二者作差，作为res，
      * 循环上诉的res，遍历一遍所有的桶即可。
      * 而一个桶中，只需要存储max和min两个值。用两个数组表示即可（maxs，mins）
+     *
      * @param array 未排序的数据
      * @return 返回相邻两个数的最大差值
      */
@@ -48,20 +65,15 @@ public class Code01_CalcTwoNumDiv {
         //遍历数据
         for (int i = 0; i < array.length; i++) {
             int bit = getBit(array[i], len, max, min); //桶的位置
-            if (!hasNum[bit]) {
-                maxs[bit] = array[i];
-                mins[bit] = array[i];
-                hasNum[bit] =true;
-            } else {
-                maxs[bit] = Math.max(maxs[bit], array[i]);
-                mins[bit] = Math.min(mins[bit], array[i]);
-            }
+            maxs[bit] = hasNum[bit] ? Math.max(maxs[bit], array[i]) : array[i]; //更新最大值
+            mins[bit] = hasNum[bit] ? Math.min(mins[bit], array[i]) : array[i]; //更新最小值
+            hasNum[bit] = true; //始终更新为true
         }
 
         //第一个桶和最后一个桶，肯定是有数据的。
         int preMax = maxs[0];
         int res = Integer.MIN_VALUE; //最终的结果
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i <= len; i++) {
             if (hasNum[i]) {
                 res = Math.max(res, mins[i] - preMax);
                 preMax = maxs[i]; //更新前一个的最大值
@@ -71,6 +83,28 @@ public class Code01_CalcTwoNumDiv {
     }
 
     public static int getBit(int num, int len, int max, int min) {
-        return  ((num - min) * len) / (max - min); //计算num应该存储在哪个桶
+        return ((num - min) * len) / (max - min); //计算num应该存储在哪个桶
+    }
+
+
+    public static int sortAfter(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return 0;
+        }
+
+        Arrays.sort(arr);
+        int res = Integer.MIN_VALUE;
+        for (int i = 1; i < arr.length; i++) {
+            res = Math.max(res, arr[i] - arr[i - 1]);
+        }
+        return res;
+    }
+
+    public static int[] generateArr(int N , int range) {
+        int[] arr = new int[N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = (int)(Math.random() * range);
+        }
+        return arr;
     }
 }
