@@ -16,5 +16,34 @@ package backtrackingarithmetic;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 public class Code03_IslandLength {
+    class Solution {
+        public int islandPerimeter(int[][] grid) {
+            boolean[][] isVisit = new boolean[grid.length][grid[0].length];
+            return process(grid, 0, 0, isVisit);
+        }
 
+        private int process(int[][] grid, int i, int j, boolean[][] isVisit) {
+            if (i < 0 || j < 0 || j >= grid[0].length || i >= grid.length || isVisit[i][j]) return 0;
+            int sum = 0;
+            if (grid[i][j] == 1) {
+                if (i - 1 < 0 || grid[i - 1][j] == 0) {
+                    sum++;
+                }
+                if (i + 1 >= grid.length || grid[i + 1][j] == 0) {
+                    sum++;
+                }
+                if (j - 1 < 0 || grid[i][j - 1] == 0) {
+                    sum++;
+                }
+                if (j + 1 >= grid[0].length || grid[i][j + 1] == 0) {
+                    sum++;
+                }
+            }
+            isVisit[i][j] = true;
+            sum += process(grid, i, j + 1, isVisit); //往右走
+            sum += process(grid, i +1, j, isVisit); //往下走
+            return sum;
+
+        }
+    }
 }

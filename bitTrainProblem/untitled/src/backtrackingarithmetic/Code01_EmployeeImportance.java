@@ -1,5 +1,7 @@
 package backtrackingarithmetic;
 
+import java.util.*;
+
 /**
  * Created by Terry
  * User: Administrator
@@ -15,5 +17,66 @@ package backtrackingarithmetic;
  * 链接：https://leetcode-cn.com/problems/employee-importance
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
+
+class Employee {
+    public int id;
+    public int importance;
+    public List<Integer> subordinates;
+}
+
 public class Code01_EmployeeImportance {
+    public int getImportance(List<Employee> employees, int id) {
+        if (employees == null) {
+            return 0;
+        }
+
+        // Employee cur = findEmp(employees, id);//找到根节点
+        // return process(cur, employees);
+        return process(employees, id);
+    }
+
+    private Employee findEmp(List<Employee> employees, int id) {
+        Employee cur = null;
+        for (Employee emp : employees) {
+            if (id == emp.id) {
+                cur = emp;
+                break;
+            }
+        }
+        return cur;
+    }
+
+    //解法一-深度搜索
+    private int process(Employee emp, List<Employee> employees) {
+        int sum = emp.importance;
+        for (int i : emp.subordinates) {
+            Employee next = findEmp(employees, i);
+            sum += process(next, employees);
+        }
+        return sum;
+    }
+
+    //解法二-广度搜索
+    Map<Integer, Employee> map = new HashMap<>(); //存储每个id所对应的对象
+    private int process(List<Employee> employees, int id) {
+        for (Employee emp : employees) {
+            map.put(emp.id, emp);
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(id);
+        int sum = 0;
+        while (!queue.isEmpty()) {
+            id = queue.poll();
+            Employee emp = map.get(id);
+            sum += emp.importance;
+            List<Integer> list = emp.subordinates;
+            for (Integer i : list) {
+                queue.add(i);
+            }
+        }
+        return sum;
+    }
+
+
 }

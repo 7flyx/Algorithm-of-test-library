@@ -15,4 +15,34 @@ package backtrackingarithmetic;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 public class Code06_IslandMaxArea {
+    class Solution {
+        public int maxAreaOfIsland(int[][] grid) {
+            if (grid == null) {
+                return 0;
+            }
+            boolean[][] isVisit = new boolean[grid.length][grid[0].length];
+            int res = 0;
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[0].length; j++) {
+                    if (!isVisit[i][j] && grid[i][j] == 1) {
+                        res = Math.max(res, infection(grid, isVisit, i, j)); //取最大值
+                    }
+                }
+            }
+            return res;
+        }
+        //通过感染函数，进行计算所感染的岛屿数量
+        private int infection(int[][] grid, boolean[][] isVisit, int i, int j) {
+            if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == 0 || isVisit[i][j]) {
+                return 0;
+            }
+            isVisit[i][j] = true;
+            int res = 1;
+            res += infection(grid, isVisit, i, j + 1);
+            res += infection(grid, isVisit, i, j - 1);
+            res += infection(grid, isVisit, i + 1, j);
+            res += infection(grid, isVisit, i - 1, j);
+            return res;
+        }
+    }
 }

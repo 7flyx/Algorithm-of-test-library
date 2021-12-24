@@ -1,5 +1,7 @@
 package backtrackingarithmetic;
 
+import java.util.Stack;
+
 /**
  * Created by Terry
  * User: Administrator
@@ -17,4 +19,58 @@ package backtrackingarithmetic;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 public class Code02_ImageRander {
+    class Solution {
+        public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+            if (image == null || sr < 0 || sr >= image.length || sc < 0 || sc >= image[0].length) {
+                return image;
+            }
+
+            //boolean[][] isVisit = new boolean[image.length][image[0].length];
+            //process(image, isVisit, sr, sc,newColor, image[sr][sc]);
+            process(image, sr, sc, newColor);
+            return image;
+        }
+
+        //深度搜索
+        private void process(int[][] image, boolean[][] isVisit, int i, int j, int newColor, int flag) {
+            if (i < 0 || i >= image.length || j < 0 || j >= image[0].length || isVisit[i][j] || image[i][j] != flag) {
+                return;
+            }
+
+            image[i][j] = newColor;
+            isVisit[i][j] = true;
+            process(image, isVisit, i + 1, j, newColor, flag);
+            process(image, isVisit, i - 1, j, newColor, flag);
+            process(image, isVisit, i, j + 1, newColor, flag);
+            process(image, isVisit, i, j - 1, newColor, flag);
+        }
+
+        //广度搜索
+        private void process(int[][] image, int sr, int sc, int newColor) {
+            Stack<Integer> stack = new Stack<>();
+            stack.push(sr);
+            stack.push(sc);
+            int oldColor = image[sr][sc];
+            while (!stack.isEmpty()) {
+                sc = stack.pop();//行
+                sr = stack.pop(); //列
+                if (sc >= 0 && sr >= 0 && sr < image.length && sc < image[0].length &&
+                        image[sr][sc] == oldColor && oldColor != newColor) {
+                    image[sr][sc] = newColor;
+                    //左
+                    stack.push(sr - 1);
+                    stack.push(sc);
+                    //右
+                    stack.push(sr + 1);
+                    stack.push(sc);
+                    //上
+                    stack.push(sr);
+                    stack.push(sc + 1);
+                    //下
+                    stack.push(sr);
+                    stack.push(sc - 1);
+                }
+            }
+        }
+    }
 }
