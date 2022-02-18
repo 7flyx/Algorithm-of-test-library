@@ -38,6 +38,52 @@ public class Code01_IndexTree {
         }
     }
 
+    public static class IndexTree2 {
+        private int[] nums; //原数组
+        private int[] tree; //累加和数组
+        private int length; //数组长度
+
+        public IndexTree2(int N) {
+            this.length = N + 1; //要舍弃0下标的空间
+            this.nums = new int[length];
+            this.tree = new int[length];
+        }
+
+        //在index位置放入，val值
+        public void add(int index, int val) {
+            if (index < 1 || index >= length) {
+                return; //越界的情况
+            }
+            nums[index] += val; //改动原数组
+            for (int i = index; i < length; i += (i & -i)) {
+                tree[i] += val; //改累加和数组
+            }
+        }
+
+        public void update(int index, int newVal) {
+            if (index < 1 || index >= length) {
+                return;//越界的情况
+            }
+            int value = newVal - nums[index]; //计算与之前的差值，最后累加到tree数组即可
+            nums[index] = newVal; //改为新的数据
+            for (int i = index; i < length; i += (i & -i)) {
+                tree[i] += value; //累加差值即可
+            }
+        }
+
+        //查询1 ~ index位置的累加和
+        public int query(int index) {
+            if (index < 1 || index >= length) {
+                return -1; //越界的情况
+            }
+            int res = 0;
+            for (int i = index; i > 0; i -= (i & -i)) {
+                res += tree[i];
+            }
+            return res;
+        }
+    }
+
     public static class Right {
         private int[] nums;
         private int N;
@@ -63,8 +109,9 @@ public class Code01_IndexTree {
     public static void main(String[] args) {
         int N = 100;
         int V = 100;
-        int testTime = 2000000;
+        int testTime = 20000;
         IndexTree tree = new IndexTree(N);
+        IndexTree2 tree2 = new IndexTree2(N);
         Right test = new Right(N);
         System.out.println("test begin");
         for (int i = 0; i < testTime; i++) {
@@ -72,9 +119,9 @@ public class Code01_IndexTree {
             if (Math.random() <= 0.5) {
                 int add = (int) (Math.random() * V);
                 tree.add(index, add);
-                test.add(index, add);
+                tree2.add(index, add);
             } else {
-                if (tree.sum(index) != test.sum(index)) {
+                if (tree.sum(index) != tree2.query(index)) {
                     System.out.println("Oops!");
                 }
             }
