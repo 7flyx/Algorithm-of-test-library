@@ -59,23 +59,11 @@ import java.util.List;
  */
 public class Code02_EveryStepShowBoss {
 
-    public static class Customer {
-        public int id;
-        public int buy; // 买的商品数
-        public int time; // 时间点
-
-        public Customer(int id, int buy, int time) {
-            this.buy = buy;
-            this.id = id;
-            this.time = time;
-        }
-    }
-
     public static class DaddyCompare implements Comparator<Customer> {
         @Override
         public int compare(Customer o1, Customer o2) {
             if (o1.buy == o2.buy) { // 买的东西都一样，先进入的排前面
-                return o1.time - o2.time;
+                return o1.enterTime - o2.enterTime;
             }
             return o1.buy - o2.buy; // 买的东西少的排前面
         }
@@ -85,9 +73,9 @@ public class Code02_EveryStepShowBoss {
         @Override
         public int compare(Customer o1, Customer o2) {
             if (o1.buy == o2.buy) { // 买的东西相同时，先买的人排在前面
-                return o1.time - o2.time;
+                return o1.enterTime - o2.enterTime;
             }
-            return o2.buy - o2.buy; // 买的东西多的人，排在前面
+            return o2.buy - o1.buy; // 买的东西多的人，排在前面
         }
     }
 
@@ -124,7 +112,7 @@ public class Code02_EveryStepShowBoss {
 
             //  当前Consumer既不在候选区，也不在获奖区
             if (!candidate.contains(c) && !daddy.contains(c)) {
-                c.time = time;
+                c.enterTime = time;
                 if (daddy.size() < limit) {
                     daddy.push(c);
                 } else {
@@ -152,15 +140,15 @@ public class Code02_EveryStepShowBoss {
             }
             if (daddy.size() < limit) { // 获奖区还没满的情况
                 Customer c = candidate.pop();
-                c.time = time;
+                c.enterTime = time;
                 daddy.push(c);
             } else {
                 // 候选区买的东西 比 获奖区买的东西多
                 if (candidate.peek().buy > daddy.peek().buy) {
                     Customer oldDad = daddy.pop();
-                    oldDad.time = time;
+                    oldDad.enterTime = time;
                     Customer newDad = candidate.pop();
-                    newDad.time = time;
+                    newDad.enterTime = time;
                     candidate.push(oldDad); // 压入被挤出来的金主爸爸
                     daddy.push(newDad); // 压入新的金主爸爸
                 }
@@ -221,7 +209,7 @@ public class Code02_EveryStepShowBoss {
             }
             // 两个区域都没有当前Consumer对象时， 添加即可
             if (!daddy.contains(c) && !candidate.contains(c)) {
-                c.time = i; // 更新进去区域的时间
+                c.enterTime = i; // 更新进去区域的时间
                 if (daddy.size() < k) {
                     daddy.add(c);
                 } else {
@@ -248,7 +236,7 @@ public class Code02_EveryStepShowBoss {
         }
         if (daddy.size() < k) { // 获奖区还没有满的情况
             Customer newDad = candidate.get(0);
-            newDad.time = time;
+            newDad.enterTime = time;
             candidate.remove(0); // 删除在候选区的对象
             daddy.add(newDad);
         } else {
@@ -256,8 +244,8 @@ public class Code02_EveryStepShowBoss {
             if (candidate.get(0).buy > daddy.get(0).buy) {
                 Customer newDad = candidate.get(0);
                 Customer oldDad = daddy.get(0);
-                newDad.time = time;
-                oldDad.time = time; // 更新二者进入区域的时间
+                newDad.enterTime = time;
+                oldDad.enterTime = time; // 更新二者进入区域的时间
                 candidate.set(0, oldDad);
                 daddy.set(0, newDad);
             }
@@ -330,7 +318,7 @@ public class Code02_EveryStepShowBoss {
         return true;
     }
 
-    public static void main1(String[] args) {
+    public static void main(String[] args) {
         int maxValue = 10;
         int maxLen = 100;
         int maxK = 6;
@@ -357,7 +345,7 @@ public class Code02_EveryStepShowBoss {
         System.out.println("测试结束");
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         int[] arr = {4, 4, 1, 8, 9, 6, 4, 8, 5, 5, 7, 4, 1, 8, 8, 2, 1, 3, 7, 8, 1, 3, 5, 6, 7, 8, 8, 1, 1, 6, 2, 5, 2, 6, 8, 6, 7, 6, 7, 7, 0, 0, 1, 7, 9, 6, 4, 5, 2, 7, 1, 7, 9, 0, 4, 0, 6, 0, 6, 1, 3, 0, 0, 3, 5, 6, 7, 0, 5, 4, 5, 4};
         boolean[] op = {true, false, true, true, true, true, false, false, true, false, true, true, true, true, false, true, true, false, false, true, false, false, false, false, true, true, false, true, false, true, true, true, true, true, false, true, true, true, false, false, true, true, true, true, false, true, false, false, false, false, false, true, false, true, true, true, false, true, false, false, true, false, false, false, true, true, false, false, true, false, true, true};
         int k = 3;
