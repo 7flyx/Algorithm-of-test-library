@@ -20,9 +20,8 @@ public class Code04_BinarySearch {
 
         int left = 0;
         int right = arr.length;
-        int mid = 0;
         while (left < right) {
-            mid = left + ((right - left) >> 1);
+            int mid = left + ((right - left) >> 1);
             if (arr[mid] > num) {
                 right = mid - 1;
             } else if (arr[mid] < num) {
