@@ -357,6 +357,4 @@ public class Code02_EveryStepShowBoss {
             System.out.println(ans2);
         }
     }
-
-
 }
