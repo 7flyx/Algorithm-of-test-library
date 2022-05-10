@@ -18,7 +18,8 @@ public class Code02_IsCompletelyTree {
 
     }
 
-    public static boolean isCompletelyTree(TreeNode node) {
+    // 层序遍历的方式进行解
+    public static boolean isCompletelyTree1(TreeNode node) {
         if (node == null) {
             return false;
         }
@@ -51,4 +52,53 @@ public class Code02_IsCompletelyTree {
         }
         return true;
     }
+
+    // 递归套路解-向左右子树进行要信息
+    // 整个可能性有四种
+    public static boolean isCompletelyTree2(TreeNode node) {
+        if (node == null) {
+            return false;
+        }
+        return process(node).isCBT;
+    }
+
+    private static Info process(TreeNode node) {
+        if (node == null) {
+            return new Info(true, true, 0);
+        }
+        Info leftInfo = process(node.left);
+        Info rightInfo = process(node.right);
+        int height = Math.max(leftInfo.height, rightInfo.height) + 1;
+        boolean isFull = leftInfo.isFull && rightInfo.isFull &&
+                leftInfo.height == rightInfo.height;
+        boolean isCBT = isFull; // 是满二叉树，也就是完全二叉树
+        // 整合以下4种可能性
+        // 可能性一: 判断两颗子树是不是满二叉树且高度还一样，那就是完全二叉树
+        // 可能性二：左子树是满二叉树，右子树是完全二叉树，左边height = 右边height，就是完全二叉树
+        if (leftInfo.isFull && rightInfo.isCBT && leftInfo.height == rightInfo.height) {
+            isCBT = true;
+        }
+        // 可能性三：左子树是完全二叉树，右子树是满二叉树，左边height = 右边height，就是完全二叉树
+        if (leftInfo.isCBT && rightInfo.isFull && leftInfo.height == rightInfo.height + 1) {
+            isCBT = true;
+        }
+        // 可能性四：左边是满二叉树，右边是满二叉树，且左边height = 右边height+ 1，就是完全二叉树
+        if (leftInfo.isFull && rightInfo.isFull && leftInfo.height == rightInfo.height + 1) {
+            isCBT = true;
+        }
+        return new Info(isFull, isCBT, height);
+    }
+
+    private static class Info {
+        public boolean isFull; //是不是满二叉树
+        public boolean isCBT; // 是不是完全二叉树
+        public int height; // 高度
+
+        public Info(boolean isFull, boolean isCBT, int height) {
+            this.isFull = isFull;
+            this.isCBT = isCBT;
+            this.height = height;
+        }
+    }
+
 }
