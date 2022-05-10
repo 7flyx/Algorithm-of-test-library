@@ -21,7 +21,6 @@ public class Code05_GetTwoNodeDistance {
         if (root == node1 || root == node2) {
             return 1;
         }
-
         int leftInfo = getTwoNodeDistance(root.left, node1, node2);
         int rightInfo = getTwoNodeDistance(root.right, node1, node2);
         if (leftInfo != 0 && rightInfo != 0) {
