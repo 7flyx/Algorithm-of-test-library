@@ -1,5 +1,6 @@
 package class02;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,13 +13,43 @@ import java.util.Set;
  * Description: 给定一个数组，其中一种数出现了K次，其余的数都是出现了M次，M>1，并且M>K的
  * 请返回这个出现K次的数
  */
+
 public class Code04_KM {
+    static class Solution {
+        public int getKM(int[] arr, int k, int m) {
+            if (arr == null || k > m) {
+                return -1;
+            }
+
+            // 0 指的是低位
+            // 31 指的是高位
+            int[] t = new int[32]; // 听过一个数组，统计每个数字每一位的的情况
+            for (int i = 0; i < arr.length; i++) {
+                for (int j = 0; j < 32 && ((arr[i] >> j) != 0); j++) { // 填写t数组
+                    if (((arr[i] >> j) & 1) == 1) { // 当前位是1的情况，进行累加
+                        t[j] += 1;
+                    }
+                }
+            }
+
+            // 再结算t数组中的每一位
+            int res = 0;
+            for (int i = 0; i < 32; i++) {
+                if (t[i] % m != 0) { // 不是m的整数倍，说明 求余数后就是 k
+                    res += (1 << i);
+                }
+            }
+            return res;
+        }
+    }
+
     public static void main(String[] args) {
-        int numKings = 10; // 数字种数
+        Solution solution = new Solution();
+        int numKings = 100; // 数字种数
         int range = 100; // 生成的数字范围
         int testTimes = 10000; // 测试次数
-        System.out.println("测试开始");
-        for (int i = 0; i < testTimes; i++) {
+        boolean success = true;
+        for (int i = 0; i < testTimes && success; i++) {
             int a = (int) (Math.random() * 9) + 1; // 1~9范围
             int b = (int) (Math.random() * 9) + 1; // 1~9范围
             int k = Math.min(a, b);
@@ -28,16 +59,20 @@ public class Code04_KM {
             }
             // 生成随机数组
             int[] arr = generateArray(numKings, range, k, m);
-            int ans1 = test(arr, k, m);
-            int ans2 = getKM(arr, k, m);
-            if (ans1 != ans2) {
-                System.out.println("测试失败");
-                System.out.println(ans1);
-                System.out.println(ans2);
+            int[] copy = Arrays.copyOf(arr, arr.length);
+            int testAns = test(arr, k, m);
+            int userAns = solution.getKM(arr, k, m);
+            if (testAns != userAns) {
+                System.out.println("测试数据：" + Arrays.toString(copy));
+                System.out.println("预期输出：" + testAns);
+                System.out.println("实际输出：" + userAns);
+                success = false;
                 break;
             }
         }
-        System.out.println("测试结束");
+        if(success) {
+            System.out.println("测试通过");
+        }
     }
 
     private static int[] generateArray(int numKings, int range, int k, int m) {
@@ -81,38 +116,11 @@ public class Code04_KM {
         return ((int)(Math.random() * range) + 1) - ((int)(Math.random() * range) + 1);
     }
 
-    public static int getKM(int[] arr, int k, int m) {
-        if (arr == null || k > m) {
-            return -1;
-        }
-
-        // 0 指的是低位
-        // 31 指的是高位
-        int[] t = new int[32]; // 听过一个数组，统计每个数字每一位的的情况
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < 32 && ((arr[i] >> j) != 0); j++) { // 填写t数组
-                if (((arr[i] >> j) & 1) == 1) { // 当前位是1的情况，进行累加
-                    t[j] += 1;
-                }
-            }
-        }
-
-        // 再结算t数组中的每一位
-        int res = 0;
-        for (int i = 0; i < 32; i++) {
-            if (t[i] % m != 0) { // 不是m的整数倍，说明 求余数后就是 k
-                res += (1 << i);
-            }
-        }
-        return res;
-    }
-
     // 测试方法
     public static int test(int[] arr, int k, int m) {
         if (arr == null || k > m) {
             return -1;
         }
-
         // 统计频率即可
         HashMap<Integer, Integer> map = new HashMap<>();
         for (int num : arr) {
@@ -122,7 +130,6 @@ public class Code04_KM {
                 map.put(num, 1 + map.get(num));
             }
         }
-
         Set<Integer> integers = map.keySet();
         for (int num : integers) {
             if (map.get(num) == k) {
