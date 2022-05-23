@@ -75,7 +75,6 @@ public class Code03_PartitionLinkedList {
             eT.next = bH;
         }
         return sH != null? sH : (eH != null? eH : bH);
-
     }
 
     public static Node buildList(int length) {
