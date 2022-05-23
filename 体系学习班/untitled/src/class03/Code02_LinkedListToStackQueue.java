@@ -7,17 +7,21 @@ package class03;
  * Time: 16:38
  * Description: 用链表实现 栈和队列
  */
+
+class Solution {
+    private static class Node {
+        public int value;
+        public Node next;
+
+        public Node(){}
+        public Node(int value) {
+            this.value = value;
+        }
+    }
+}
+
 public class Code02_LinkedListToStackQueue {
     public static void main(String[] args) {
-//        LinkedListToStack<Integer> stack = new LinkedListToStack<>();
-//        stack.push(2);
-//        stack.push(3);
-//        System.out.println(stack.size());
-//        System.out.println(stack.peek());
-//        System.out.println(stack.pop());
-//        System.out.println(stack.peek());
-//        System.out.println(stack.size());
-
         LinkedListToQueue<Integer> queue = new LinkedListToQueue<>();
         queue.add(1);
         queue.add(2);
