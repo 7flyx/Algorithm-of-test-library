@@ -129,6 +129,60 @@ public class Code02_ProvinceSum {
         }
     }
 
+    // 左神的思路实现的数组的并查集
+    static class Solution4 {
+        private int[] parent;
+        private int[] size;
+        private int[] helpStack; // 辅助栈，比stack要快
+        private int sets; // 表示集合数量
+
+        public Solution4(int N) {
+            this.parent = new int[N];
+            this.helpStack = new int[N];
+            this.size = new int[N];
+            this.sets = N; // 先让每个元素自己单独成为一个集合，后续在union的时候，在减回来即可
+            for (int i = 0; i < N; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public void union(int i, int j) {
+            int f1 = findFather(i);
+            int f2 = findFather(j);
+            if (f1 != f2) {
+                if (size[f1] >= size[f2]) {
+                    parent[f2] = f1;
+                    size[f1] += size[f2];
+                    size[f2] = 0;
+                } else {
+                    parent[f1] = f2;
+                    size[f2] += size[f1];
+                    size[f1] = 0;
+                }
+                sets--;
+            }
+        }
+
+        private int findFather(int i) {
+            int hi = 0;
+            while (i != parent[i]) {
+                helpStack[hi++] = i;
+                i = parent[i];
+            }
+            // 路径压缩
+            while (hi-- > 0) {
+                parent[helpStack[hi]] = i;
+            }
+            return i;
+        }
+
+        // 当前并查集的集合个数
+        public int getSets() {
+            return sets;
+        }
+    }
+
     // 深搜或者广搜
     static class Solution3 {
         public int findCircleNum(int[][] isConnected) {
@@ -180,8 +234,19 @@ public class Code02_ProvinceSum {
 
     public static void main(String[] args) {
         int[][] arr = {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
-        Solution3 solution3 = new Solution3();
-        int circleNum = solution3.findCircleNum(arr);
-        System.out.println(circleNum);
+//        Solution3 solution3 = new Solution3();
+//        int circleNum = solution3.findCircleNum(arr);
+//        System.out.println(circleNum);
+
+        Solution4 solution4 = new Solution4(arr.length);
+        // 只需要遍历右上角部分的值，应该左下角和右上角部分是对应的
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i][j] == 1) {
+                    solution4.union(i, j);
+                }
+            }
+        }
     }
+
 }
