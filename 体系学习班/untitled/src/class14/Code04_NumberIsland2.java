@@ -8,7 +8,7 @@ import java.util.List;
  * User: Administrator
  * Date: 2022-05-24
  * Time: 22:46
- * Description: LeetCode305 岛屿数量2
+ * Description: LeetCode305 岛屿数量2。 lintcode434题
  * 假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。
  * 起始的时候，每个格子的地形都被默认标记为「水」。我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。
  * 你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。
