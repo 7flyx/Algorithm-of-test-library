@@ -11,8 +11,6 @@ public class Code05_Dijkstra {
         if (start == null) {
             return new HashMap<>();
         }
-        // 小根堆，存储的是边
-        PriorityQueue<Edge> queue = new PriorityQueue<>();
         // 已经选择过的点
         HashSet<Node> selectedNode = new HashSet<>();
         // 存储start到每一个点的最短距离
