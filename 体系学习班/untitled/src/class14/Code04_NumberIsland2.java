@@ -59,7 +59,7 @@ public class Code04_NumberIsland2 {
             return ans;
         }
 
-        private static class UnionSet {
+        private class UnionSet {
             private int[] parent;
             private int[] helpStack;
             private int[] size;
