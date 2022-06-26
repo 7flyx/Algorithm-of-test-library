@@ -49,7 +49,7 @@ public class Code18_LesserGatherSum1 {
         if (arr == null || arr.length == 0) {
             return 0;
         }
-        int sum = 0;  
+        int sum = 0;
         for (int num : arr) {
             sum += num;
         }
