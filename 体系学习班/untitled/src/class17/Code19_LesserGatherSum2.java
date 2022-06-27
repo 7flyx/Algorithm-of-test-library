@@ -130,7 +130,7 @@ public class Code19_LesserGatherSum2 {
                 } else {
                     preDp[pick][rest] = -1;
                 }
-            }   
+            }
         }
         // 填写普遍位置
         for (int i = N - 1; i >= 0; i--) {
