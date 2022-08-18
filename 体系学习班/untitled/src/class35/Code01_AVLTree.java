@@ -127,9 +127,9 @@ public class Code01_AVLTree {
                     }
                     if (preNode != null) {
                         preNode.left = minNode.right;
+                        minNode.right = node.right;
                     }
                     minNode.left = node.left;
-                    minNode.right = node.right;
                     // C++，释放node空间
                     node = minNode;
                 }
