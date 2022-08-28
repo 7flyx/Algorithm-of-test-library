@@ -119,19 +119,31 @@ public class Code01_AVLTree {
                 } else if (node.left == null) { // 只有右子树
                     node = node.right;
                 } else { // 左右子树都存在的情况
-                    TreeNode minNode = node.right; // 右子树上最左的节点
-                    TreeNode preNode = null; // minNode的父节点
-                    while (minNode.left != null) {
-                        preNode = minNode;
-                        minNode = minNode.left;
+                    // 这里应该用递归的方式去删除节点，才能保证每个子树都是平衡的
+                    TreeNode des = node.right;
+                    while (des.left != null) {
+                        des = des.left;
                     }
-                    if (preNode != null) {
-                        preNode.left = minNode.right;
-                        minNode.right = node.right;
-                    }
-                    minNode.left = node.left;
-                    // C++，释放node空间
-                    node = minNode;
+
+                    node.right = delete(node.right, des.val); // 在右子树上删除des.val
+                    des.right = node.right;
+                    des.left = node.left;
+                    node = des;
+
+                    // 下面这种删除节点的方式，只是删除了某个节点，并没有保证node的右子树是平衡的
+//                    TreeNode minNode = node.right; // 右子树上最左的节点
+//                    TreeNode preNode = null; // minNode的父节点
+//                    while (minNode.left != null) {
+//                        preNode = minNode;
+//                        minNode = minNode.left;
+//                    }
+//                    if (preNode != null) {
+//                        preNode.left = minNode.right;
+//                        minNode.right = node.right;
+//                    }
+//                    minNode.left = node.left;
+//                    // C++，释放node空间
+//                    node = minNode;
                 }
             }
             if(node == null) { // 有可能变为null的。
