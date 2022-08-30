@@ -114,6 +114,7 @@ public class Code01_SectionSum {
             long rightLeftSize = node.right != null && node.right.left != null ? node.right.left.size : 0;
             if (leftLeftSize > rightSize) { // LL
                 node = rightRotate(node);
+                node.right = maintain(node.right);
                 node = maintain(node);
             } else if (leftRightSize > rightSize) { // LR
                 node.left = leftRotate(node.left);
@@ -129,6 +130,7 @@ public class Code01_SectionSum {
                 node = maintain(node);
             } else if (rightRightSize > leftSize) { // RR
                 node = leftRotate(node);
+                node.left = maintain(node.left);
                 node = maintain(node);
             }
             return node;
