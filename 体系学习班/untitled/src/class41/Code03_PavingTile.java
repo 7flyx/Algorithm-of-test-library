@@ -19,6 +19,7 @@ public class Code03_PavingTile {
         System.out.println(ways1(N, M));
         System.out.println(ways2(N, M));
         System.out.println(ways3(N, M));
+        System.out.println(ways4(N, M));
     }
 
     // 普通暴力解
@@ -149,6 +150,37 @@ public class Code03_PavingTile {
         // 尝试着横着放砖
         if (i + 1 < col && (cur & (1 << i)) == 0 && (cur & (1 << (i + 1))) == 0) {
             ans += dfs3((cur | (3 << i)), level, i + 2, row, col, dp);
+        }
+        return ans;
+    }
+
+    // 严格依赖的动态规划版本
+    public static int ways4(int N, int M) {
+        if (N <= 0 || M <= 0) {
+            return 0;
+        }
+        int max = Math.max(N, M);
+        int min = Math.min(N, M);
+        int pre = (1 << min) - 1; // 右侧min位全是1
+        int[][] dp = new int[max + 1][pre + 1];
+        dp[max][pre] = 1; // base case. 这一行其他位置全是0
+        for (int level = max - 1; level >= 0; level--) { // 从下往上
+            for (int preStatus = 0; preStatus <= pre; preStatus++) { // 从左往右
+                int cur = (~preStatus) & pre; // 得到当前这一行的状态，然后去横向铺砖
+                dp[level][preStatus] = dfs4(cur, level, 0, max, min, dp);
+            }
+        }
+        return dp[0][pre]; // 返回右上角的值即可
+    }
+
+    private static int dfs4(int cur, int level, int i, int row, int col, int[][] dp) {
+        if (i == col) {
+            return dp[level + 1][cur];
+        }
+        int ans = 0;
+        ans += dfs4(cur, level, i + 1, row, col, dp); // 当前位置不铺砖的情况
+        if (i + 1 < col && (cur & (1 << i)) == 0 && (cur & (1 << (i + 1))) == 0) {
+            ans += dfs4((cur | (3 << i)), level, i + 2, row, col, dp); // 当前位置以及右侧的位置，横向放一块砖
         }
         return ans;
     }
