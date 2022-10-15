@@ -123,7 +123,7 @@ public class Code05_WashCofferCup {
         int[][] dp = new int[N][limit];
         for (int i = 0; i < limit; i++) {
             //最后一个杯子，机器洗和自然晾干的时间，求最优解
-            dp[N - 1][i] = Math.min(Math.max(drinks[N - 1], i) + a, drinks[N - 1] + b);
+            dp[N - 1][i] = Math.min(Math.max(drinks[N - 1], i) + a, drinks[N - 1] + b); //Math.max(drinks[N - 1], i)中：为什么要和i比较？
         }
 
         for (int i = N - 2; i >= 0; i--) {
