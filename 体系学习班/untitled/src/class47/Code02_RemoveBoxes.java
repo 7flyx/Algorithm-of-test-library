@@ -66,7 +66,6 @@ public class Code02_RemoveBoxes {
                 dp[i][i][k] = (k + 1) * (k + 1);
             }
         }
-
         // 填写普遍位置----从下往上填写
         for (int L = N - 2; L >= 0; L--) {  // 行
             for (int R = L + 1; R < N; R++) { // 列
