@@ -28,7 +28,7 @@ public class Code01_LastSubstring {
             return s.substring(dc3.sa[ch.length - 1]); // sa数组里面存储的就是第i小的字符串的开始下标
         }
 
-        public static class DC3 {
+        public class DC3 {
 
             public int[] sa;
 
