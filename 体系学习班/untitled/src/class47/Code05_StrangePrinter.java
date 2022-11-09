@@ -74,7 +74,6 @@ public class Code05_StrangePrinter {
         return dp[0][N - 1];
     }
 
-
     public static int strangePrinter2(String s) {
         if (s == null || s.length() == 0) {
             return 0;
