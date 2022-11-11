@@ -83,7 +83,6 @@ public class Code06_RestoreWays {
                 dp[0][v][status] = (status == 0 || status == 1) && (arr[0] == 0 || arr[0] == v) ? 1 : 0;
             }
         }
-
         // 填写普遍位置
         for (int index = 1; index < N; index++) {
             for (int v = 1; v <= 200; v++) {
