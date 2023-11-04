@@ -60,7 +60,7 @@ public class Code02_IndexTree2D {
                 tmp += sum(row1 - 1, col1 - 1); //加上左上角的区域
             }
             tmp -= sum(row2, col1 - 1); //减去左半部分
-            tmp -= sum(col2, row1 - 1); //减去上半部分
+            tmp -= sum(row1 - 1, col2); //减去上半部分
             return tmp;
         }
     }
